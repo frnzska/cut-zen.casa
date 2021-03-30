@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Infrastructure to serve cut-zen.casa
+
+Resources:
+
+  DomainBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: cut-zen.casa
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+    DeletionPolicy: Retain
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      PolicyDocument:
+        Id: MyPolicy
+        Version: 2012-10-17
+        Statement:
+          - Sid: PublicReadForGetBucketObjects
+            Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource:
+              - !Join ['', ['arn:aws:s3:::', !Ref DomainBucket, '/*']]
+      Bucket: !Ref DomainBucket
+# todo WWWDomainBucket, DNS Record, website hosting enable, redirect www...
