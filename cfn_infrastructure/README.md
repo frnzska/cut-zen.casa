@@ -1,0 +1,1 @@
+`bash generate_stack.sh create buckets.yml`
