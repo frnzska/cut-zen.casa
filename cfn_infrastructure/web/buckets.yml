@@ -1,11 +1,9 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: Infrastructure to serve cut-zen.casa
 
 Parameters:
   DomainName:
     Type: String
     Default: cut-zen.casa
-
 
 Resources:
 ##########
