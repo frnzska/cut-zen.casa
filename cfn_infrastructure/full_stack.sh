@@ -22,10 +22,22 @@ _check_status() {
 	echo Done.
 }
 
+# TODO
+_create_certificate() {
+  echo 'Create certificate.. this can take some minutes'
+	aws cloudformation create-stack --stack-name certificate-for-$stack_name \
+	    --template-body file://network/certificate.yml --parameters ParameterKey=DomainName,ParameterValue=$domain_name \
+      --region us-east-1 # just specific regions available such as Virgina
+  aws cloudformation wait stack-create-complete --stack-name certificate-for-$stack_name
+  echo '.. certificate created.'
+}
+
 create() {
   _packaging
 	_validate
-	echo 'Create stack'
+  #_create_certificate
+
+  echo 'Create stack resources..'
 	aws cloudformation create-stack --stack-name $stack_name \
 			--template-body file://.packaged_$TEMPLATE \
 			--parameters ParameterKey=DomainName,ParameterValue=$domain_name
