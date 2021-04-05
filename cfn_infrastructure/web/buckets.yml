@@ -1,11 +1,8 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: Infrastructure to serve cut-zen.casa
 
 Parameters:
   DomainName:
     Type: String
-    Default: cut-zen.casa
-
 
 Resources:
 ##########
@@ -55,3 +52,8 @@ Resources:
       WebsiteConfiguration:
         RedirectAllRequestsTo:
           HostName: !Ref DomainBucket
+
+Outputs:
+  CZCWebsiteS3URL:
+    Value: !GetAtt DomainBucket.WebsiteURL
+    Description: URL for website hosted on S3

@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  DomainName:
+    Type: String
+
+Resources:
+  DNS:
+    Type: "AWS::Route53::HostedZone"
+    Properties:
+      HostedZoneConfig:
+        Comment: !Sub Hosted zone for "${DomainName}"
+      Name: !Ref DomainName
+  DNSEntries:
+    DependsOn: DNS
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneName: !Sub '${DomainName}.'
+      RecordSets:
+        - AliasTarget:
+            HostedZoneId: Z1BKCTXD74EZPE # for s3 location in Region Ireland TODO mapping region->id
+            # see https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_website_region_endpoints
+            DNSName: !Join ['', ['s3-website-', !Ref 'AWS::Region', '.amazonaws.com']]
+            # later cloudfront distro
+            # DNSName: !GetAtt
+            #            - myCloudFrontDistribution
+            #            - DomainName
+          Name: !Ref DomainName
+          Type: A

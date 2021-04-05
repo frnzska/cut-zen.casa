@@ -1,5 +1,34 @@
-.DS_Store
+
 .cache
 .idea/*
-*/tmp/*
-*/logs/*
+
+# Ignore bundler config.
+/.bundle
+
+# Ignore Mac files
+.DS_Store
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+/logs/*
+!/log/.keep
+!/logs/.keep
+!/tmp/.keep
+
+# Ignore pidfiles, but keep the directory.
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
+
+# Ignore uploaded files in development.
+/storage/*
+!/storage/.keep
+.byebug_history
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
+
+# Program config
+.packaged_root_template.yaml
+.settings.config

@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  DomainName:
+    Type: String
+
+Resources:
+  Certificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Ref DomainName
+      SubjectAlternativeNames:
+        - !Ref DomainName
+        - !Sub
+          - www.${DomainName}
+          - Domain: !Ref DomainName
+      ValidationMethod: DNS
+    # TODO add validation options with hosted zone
+
+Outputs:
+  CertificateArn:
+    Value: !Ref Certificate
+    Description: URL for website hosted on S3
