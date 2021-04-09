@@ -27,3 +27,33 @@ Resources:
             #            - DomainName
           Name: !Ref DomainName
           Type: A
+
+  CFDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: 'true'
+        Logging:
+          IncludeCookies: 'false'
+          Bucket: !Sub 'logs.${DomainName}'
+          Prefix: cloudfront
+        Aliases:
+          - !Ref DomainName
+          - !Sub 'www.${DomainName}'
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+        TargetOriginId: S3Origin
+        ViewerProtocolPolicy: "redirect-to-https"
+        Origins:
+        - Id: "S3Origin"
+          DomainName: !Sub ${DomainName}-website.s3.amazonaws.com
+          S3OriginConfig:
+            OriginAccessIdentity: # Todo!Join [ "", [ "origin-access-identity/cloudfront/", !Ref OriginAccessIdentity ] ]
+            # maybe do later
+        ViewerCertificate:
+          AcmCertificateArn: #TODO cross stack ref
+          MinimumProtocolVersion: "TLSv1.2_2018"
+          SslSupportMethod: "sni-only"
