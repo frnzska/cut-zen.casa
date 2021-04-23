@@ -5,10 +5,12 @@ Infrastructure to serve https _Some_Domain_ from s3.
 - AWS credentials configured and permissions set
 
 # Creates
+mainly in your default region
 - S3 Buckets
 - DNS, DNSRecords
-- Cloudfront Distribution TODO
-- SNS Topic TODO
+- Certificate (in region us-east-1)
+- Cloudfront Distribution
+
 
 # Setup
 1. Fill out .settings.config file.

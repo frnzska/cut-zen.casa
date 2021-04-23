@@ -10,14 +10,10 @@ Resources:
     Properties:
       DomainName: !Ref DomainName
       SubjectAlternativeNames:
-        - !Ref DomainName
-        - !Sub
-          - www.${DomainName}
-          - Domain: !Ref DomainName
+        #- !Ref DomainName
+        - !Join [ '.', [ 'www', !Ref DomainName ] ]
       ValidationMethod: DNS
-    # TODO add validation options with hosted zone
 
 Outputs:
-  CertificateArn:
+  ACMCertificateArn:
     Value: !Ref Certificate
-    Description: URL for website hosted on S3
