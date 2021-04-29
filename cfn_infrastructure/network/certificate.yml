@@ -10,10 +10,6 @@ Resources:
     Properties:
       DomainName: !Ref DomainName
       SubjectAlternativeNames:
-        #- !Ref DomainName
         - !Join [ '.', [ 'www', !Ref DomainName ] ]
       ValidationMethod: DNS
 
-Outputs:
-  ACMCertificateArn:
-    Value: !Ref Certificate
