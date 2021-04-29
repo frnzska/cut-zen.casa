@@ -1,18 +1,20 @@
 # Description
-Infrastructure to serve https _yourDomain_ from s3 using Cloudfront.
+Infrastructure to serve _yourDomain_ from s3 using Cloudfront. Redirects http request to https. 
+Serving both
+- _yourDomain_ e.g. example.com 
+- _www.yourDomain_ e.g. www.example.com
 
-# Requirements
-- AWS credentials configured and permissions set
+## Requirements
+- AWS credentials configured, permissions to create related resources.
 
-# Creates
+## Creates
 in your default region
 - S3 Buckets: yourDomain,  www.yourDomain and logs.yourDomain
-- DNS, DNSRecords
+- DNS records
 - Certificate (in region us-east-1)
 - Cloudfront Distribution
 
-
-# Setup
+## Setup
 1. Fill out .settings.config file.
 
 2. Generate infrastructure with 
