@@ -4,7 +4,7 @@ TEMPLATE=root_template.yaml
 . .settings.config
 METHOD=$1
 end_color='\x1B[0m'
-orange='\x1b[1;33m[4m'
+orange='\x1b[1;33m'
 green='\x1b[0;32m'
 
 _packaging() {
@@ -78,7 +78,7 @@ _validate_certificate() {
 }
 
 _create_and_wait_for_hosted_zone() {
-  echo -e "${green}Create hosted_zone${end_color}"
+  echo -e "${green} Create hosted_zone ${end_color}"
   aws cloudformation create-stack --stack-name hosted-zone-$stack_name \
 	    --template-body file://network/hosted_zone.yml --parameters ParameterKey=DomainName,ParameterValue=$domain_name
   aws cloudformation wait stack-create-complete --stack-name hosted-zone-$stack_name
@@ -88,17 +88,17 @@ create() {
   _packaging
 	_validate
 
-  echo 'Create stack resources.. should take around 30-40 min. '
+  echo 'Create stack resources.. takes around 30 min.'
   _create_certificate
   _create_and_wait_for_hosted_zone
 
-  echo -e "${orange}ACTION REQUIRED: Add name server to your domain registrar.${end_color}"
+  echo -e "${orange} ACTION REQUIRED: Add name server to your domain registrar.${end_color}"
 
   _validate_certificate
   certificate_arn=$(aws acm list-certificates --region us-east-1 \
       --query "CertificateSummaryList[?DomainName=='$domain_name'].CertificateArn" --output text)
 
-  echo 'Waiting for AWS to validate certificate.. might take longer, in avg around 20 min.'
+  echo 'Waiting for AWS to validate certificate.. might take a bit.'
   aws cloudformation wait stack-create-complete --stack-name certificate-for-$stack_name --region us-east-1
 
 	aws cloudformation create-stack --stack-name $stack_name \
@@ -121,7 +121,7 @@ delete() {
   aws cloudformation delete-stack --stack-name $stack_name
   aws cloudformation wait stack-delete-complete --stack-name $stack_name
 
-  aws cloudformation delete-stack --stack-name certificate-for-$stack_name
+  aws cloudformation delete-stack --stack-name certificate-for-$stack_name --region us-east-1
 
   aws cloudformation delete-stack --stack-name hosted-zone-$stack_name
   aws cloudformation wait stack-delete-complete --stack-name hosted-zone-$stack_name

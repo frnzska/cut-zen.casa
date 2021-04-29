@@ -13,9 +13,9 @@ Resources:
     Properties:
       DistributionConfig:
         Enabled: 'true'
-        #Logging:
-        #  IncludeCookies: 'false'
-        #  Bucket: !Sub 'logs.${DomainName}'
+        Logging:
+          IncludeCookies: 'false'
+          Bucket: !Sub 'logs.${DomainName}.s3.amazonaws.com'
         Aliases:
           - !Sub 'www.${DomainName}'
           - !Ref DomainName
@@ -32,14 +32,11 @@ Resources:
           ViewerProtocolPolicy: "redirect-to-https"
         Origins:
         - Id: S3Origin
-          DomainName: !Sub '${DomainName}.s3-website-${AWS::Region}.amazonaws.com' # todo cross stack ref
+          DomainName: !Sub '${DomainName}.s3-website-${AWS::Region}.amazonaws.com'
           CustomOriginConfig:
             HTTPPort: '80'
             HTTPSPort: '443'
             OriginProtocolPolicy: http-only
-          #S3OriginConfig:
-          #  OriginAccessIdentity: # Todo!Join [ "", [ "origin-access-identity/cloudfront/", !Ref OriginAccessIdentity ] ]
-            # maybe do later
         ViewerCertificate:
           AcmCertificateArn: !Ref CertificateArn
           SslSupportMethod: "sni-only"
