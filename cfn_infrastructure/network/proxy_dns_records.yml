@@ -1,0 +1,57 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  DomainName:
+    Type: String
+  CertificateArn:
+    Type: String
+
+
+Resources:
+  CFDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: 'true'
+        Logging:
+          IncludeCookies: 'false'
+          Bucket: !Sub 'logs.${DomainName}.s3.amazonaws.com'
+        Aliases:
+          - !Sub 'www.${DomainName}'
+          - !Ref DomainName
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          TargetOriginId: S3Origin
+          ForwardedValues:
+            QueryString: true
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: "redirect-to-https"
+        Origins:
+        - Id: S3Origin
+          DomainName: !Sub '${DomainName}.s3-website-${AWS::Region}.amazonaws.com'
+          CustomOriginConfig:
+            HTTPPort: '80'
+            HTTPSPort: '443'
+            OriginProtocolPolicy: http-only
+        ViewerCertificate:
+          AcmCertificateArn: !Ref CertificateArn
+          SslSupportMethod: "sni-only"
+  DNSEntries:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneName: !Sub '${DomainName}.'
+      RecordSets:
+        - AliasTarget:
+           HostedZoneId: Z2FDTNDATAQYW2 # HZ of Cloudfront
+           DNSName: !GetAtt [CFDistribution, DomainName]
+          Name: !Ref DomainName
+          Type: A
+        - Name: !Sub 'www.${DomainName}'
+          Type: A
+          AliasTarget:
+            DNSName: !GetAtt [CFDistribution, DomainName]
+            HostedZoneId: Z2FDTNDATAQYW2

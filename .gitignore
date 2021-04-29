@@ -32,3 +32,5 @@
 # Program config
 .packaged_root_template.yaml
 .settings.config
+
+.my_notes*

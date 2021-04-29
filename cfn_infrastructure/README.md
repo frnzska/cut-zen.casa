@@ -1,24 +1,29 @@
 # Description
-Infrastructure to serve https _Some_Domain_ from s3.
+Infrastructure to serve _yourDomain_ from s3 using Cloudfront. Redirects http request to https. 
+Serving both
+- _yourDomain_ e.g. example.com 
+- _www.yourDomain_ e.g. www.example.com
 
-# Requirements
-- AWS credentials configured and permissions set
+Takes approx 30 min. 
 
-# Creates
-- S3 Buckets
-- DNS, DNSRecords
-- Cloudfront Distribution TODO
-- SNS Topic TODO
+## Requirements
+- AWS credentials configured, permissions to create related resources.
 
-# Setup
+## Creates
+in your default region
+- S3 Buckets: yourDomain,  www.yourDomain and logs.yourDomain
+- Hosted zone, DNS records
+- Certificate (in region us-east-1)
+- Cloudfront Distribution
+
+## Setup
 1. Fill out .settings.config file.
 
-2. Generate infrastructure with 
-`bash scripts/full_stack.sh create`.
+2. Generate infrastructure by running
+`bash stack.sh create`.
    
 3. Add nameservers to your domain registrar. 
-
-5. Deploy Application TODO
+   Get nameservers from [hosted zone in AWS route 53](https://console.aws.amazon.com/route53/v2/hostedzones). 
 
 - Delete infrastructure with 
-`bash scripts/full_stack.sh delete`.
+`bash stack.sh delete`.

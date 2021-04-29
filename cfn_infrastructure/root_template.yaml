@@ -2,6 +2,8 @@ AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
   DomainName:
     Type: String
+  CertificateArn:
+    Type: String
 
 Resources:
   BucketsStack:
@@ -10,9 +12,10 @@ Resources:
       TemplateURL: web/buckets.yml
       Parameters:
         DomainName: !Ref DomainName
-# NetworkStack:
-#   Type: AWS::CloudFormation::Stack
-#   Properties:
-#     TemplateURL: network/hosting.yml
-#     Parameters:
-#       DomainName: !Ref DomainName
+  NetworkStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: network/proxy_dns_records.yml
+      Parameters:
+        DomainName: !Ref DomainName
+        CertificateArn: !Ref CertificateArn
