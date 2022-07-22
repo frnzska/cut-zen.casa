@@ -4,7 +4,7 @@ Serving both
 - _yourDomain_ e.g. example.com 
 - _www.yourDomain_ e.g. www.example.com
 
-Takes approx 30 min. 
+Takes approx 30 min to build with cfn. 
 
 ## Requirements
 - AWS credentials configured, permissions to create related resources.
